@@ -19,5 +19,5 @@ jobs:
     - run: |
         MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
         terminus auth:login --machine-token=$MACHINE_TOKEN
-        terminus machine-token:list
         terminus self:config:dump
+        terminus machine-token:list
