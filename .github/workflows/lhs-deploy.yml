@@ -1,0 +1,22 @@
+name: Deploy to Pantheon Master
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:    
+    - name: Install PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: '8'
+    - name: Installing Terminus
+      if: steps.cache-terminus.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/terminus && cd ~/terminus
+        curl -L https://github.com/pantheon-systems/terminus/releases/download/`curl --silent "https://api.github.com/repos/pantheon-systems/terminus/releases/latest" | perl -nle'print $& while m#"tag_name": "\K[^"]*#g'`/terminus.phar --output terminus
+        chmod +x terminus
+        ln -s ~/terminus/terminus /usr/local/bin/terminus
+    - run: |
+        MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
+        terminus auth:login --machine-token=$MACHINE_TOKEN
+        terminus machine-token:list
