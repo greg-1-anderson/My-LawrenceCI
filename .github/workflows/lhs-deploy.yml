@@ -15,9 +15,8 @@ jobs:
         git clone https://github.com/pantheon-systems/terminus.git
         chmod +x terminus/bin/terminus
         composer --working-dir=terminus install --no-dev
-        ln -s ~/terminus/bin/terminus /usr/local/bin/terminus
     - run: |
         MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        terminus auth:login --machine-token=$MACHINE_TOKEN
-        terminus self:config:dump
-        terminus machine-token:list
+        terminus/bin/terminus auth:login --machine-token=$MACHINE_TOKEN
+        terminus/bin/terminus self:config:dump
+        terminus/bin/terminus machine-token:list
