@@ -14,7 +14,7 @@ jobs:
       run: |
         git clone https://github.com/pantheon-systems/terminus.git
         chmod +x terminus/bin/terminus
-        composer -d terminus install --no-dev
+        composer --working-dir=terminus install --no-dev
         ln -s terminus/bin/terminus /usr/local/bin/terminus
     - run: |
         MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
