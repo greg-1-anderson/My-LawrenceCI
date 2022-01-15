@@ -12,11 +12,12 @@ jobs:
     - name: Installing Terminus
       if: steps.cache-terminus.outputs.cache-hit != 'true'
       run: |
-        mkdir ~/terminus && cd ~/terminus
-        curl -L https://github.com/pantheon-systems/terminus/releases/download/`curl --silent "https://api.github.com/repos/pantheon-systems/terminus/releases/latest" | perl -nle'print $& while m#"tag_name": "\K[^"]*#g'`/terminus.phar --output terminus
-        chmod +x terminus
-        ln -s ~/terminus/terminus /usr/local/bin/terminus
+        git clone https://github.com/pantheon-systems/terminus.git
+        chmod +x terminus/bin/terminus
+        composer --working-dir=terminus install --no-dev
+        cd terminus && git checkout debug-print
     - run: |
         MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
-        terminus auth:login --machine-token=$MACHINE_TOKEN
-        terminus machine-token:list
+        terminus/bin/terminus auth:login --machine-token=$MACHINE_TOKEN
+        terminus/bin/terminus self:config:dump
+        terminus/bin/terminus machine-token:list
