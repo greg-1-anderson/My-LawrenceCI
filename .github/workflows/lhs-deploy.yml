@@ -12,11 +12,11 @@ jobs:
     - name: Installing Terminus
       if: steps.cache-terminus.outputs.cache-hit != 'true'
       run: |
-        mkdir ~/work && cd ~/work
+        mkdir ~/terminus && cd ~/terminus
         git clone https://github.com/pantheon-systems/terminus.git
-        chmod +x bin/terminus
-        composer install --no-dev
-        ln -s bin/terminus /usr/local/bin/terminus
+        chmod +x ~/terminus/terminus/bin/terminus
+        composer -d ~/terminus/terminus install --no-dev
+        ln -s ~/terminus/terminus/bin/terminus /usr/local/bin/terminus
     - run: |
         MACHINE_TOKEN=${{ secrets.PANTHEON_MACHINE_TOKEN }}
         terminus auth:login --machine-token=$MACHINE_TOKEN
